@@ -1,16 +1,14 @@
 package ru.fizteh.fivt.students.kolmakov_sergey.sqlite.interpreter;
 
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class Command {
     private String name;
     private int minArguments;
     private int maxArguments;
-    private BiConsumer<DataBaseState, String[]> callback;
-    DataBaseState dbState;
+    private Consumer<String[]> callback;
 
-    public Command(String name, int minArguments, int maxArguments, BiConsumer<DataBaseState, String[]> callback,
-                   DataBaseState dbState) {
+    public Command(String name, int minArguments, int maxArguments, Consumer<String[]> callback) {
         this.name = name;
         this.minArguments = minArguments;
         this.maxArguments = maxArguments;
@@ -25,7 +23,7 @@ public class Command {
         if (!(minArguments <= params.length && params.length <= maxArguments)) {
             throw new WrongNumberOfArgumentsException(name + ": incorrect number of arguments");
         } else {
-            callback.accept(dbState, params);
+            callback.accept(params);
         }
     }
 }
