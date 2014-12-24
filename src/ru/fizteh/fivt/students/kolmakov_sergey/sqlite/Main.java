@@ -36,17 +36,21 @@ public class Main {
                                 System.out.println(e.getMessage());
                             }
                         }
+                    }, state),
+                    new Command("show_books", 0, 0, new BiConsumer<DataBaseState, String[]>() {
+                        @Override
+                        public void accept(DataBaseState state, String[] args) {
+                            String sql = "SELECT  * FROM books;";
+                            ResultSet resultSet;
+                            try {
+                                resultSet = statement.executeQuery(sql);
+                                printResultSet(resultSet);
+                            } catch (SQLException e){
+                                System.out.println(e.getMessage());
+                            }
+                        }
                     }, state)});
-            try {
-                System.exit(dbInterpreter.run(args));
-            } catch (Exception e) {
-                if (e.getMessage() != null) {
-                    System.out.println(e.getMessage());
-                } else {
-                    System.out.println("Unexpected error in function run");
-                }
-                System.exit(1);
-            }
+            System.exit(dbInterpreter.run(args));
             statement.close();
             connection.close();
         } catch ( Exception e ) {
